@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace GoblinRoller.Bots
 {
     /// <summary>
-    /// Picks randomly
+    /// Zero defense
     /// </summary>
-    internal class Rando : BotBase
+    internal class Blitz : BotBase
     {
         private Random _r = new();
 
-        internal Rando(Deck _deck) : base(_deck)
+        internal Blitz(Deck _deck) : base(_deck)
         {
         }
 
@@ -23,16 +23,19 @@ namespace GoblinRoller.Bots
 
             List<Card> planToPlay = new List<Card>();
 
-            foreach(Card card in MyHand.Keep)
+            foreach (Card card in MyHand.Keep)
             {
-                if (_r.Next(0,2) == 1)
-                    planToPlay.Add(card);
+                planToPlay.Add(card);
             }
 
+            // 50% chance to keep a random card to add some theft deterrence
+            int maybeKeep = _r.Next(0, 14);
+            if (maybeKeep < 7)
+                planToPlay.RemoveAt(maybeKeep);
+
             if (planToPlay.Count > 0)
-                foreach(Card card in planToPlay)
+                foreach (Card card in planToPlay)
                     MyHand.MoveToPlay(card);
         }
     }
-
 }

@@ -35,7 +35,7 @@ internal class Program
             game.Players.Add(new GoblinRoller.Bots.Rando(deck));
             game.Players[4].Name = "Egon R";
 
-            game.Players.Add(new GoblinRoller.Bots.Human(deck));
+            game.Players.Add(new GoblinRoller.Bots.Rando(deck));
             game.Players[5].Name = "You";
 
             int turns = 0;
