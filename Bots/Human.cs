@@ -11,8 +11,8 @@ namespace GoblinRoller.Bots
     /// </summary>
     internal class Human : BotBase
 {
-    internal Human(Deck deck) : base(deck)
-    {
+    internal Human(Deck _deck, string name) : base(_deck, name)
+        {
     }
 
     internal override void PlanTurn(GameTurn turn)
@@ -28,7 +28,7 @@ namespace GoblinRoller.Bots
             i++;
         }
         Console.Write("Play which? ");
-        string toPlay = Console.ReadLine();
+        string? toPlay = Console.ReadLine();
 
         if (toPlay == null || toPlay.Length == 0)
             return;

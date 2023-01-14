@@ -19,7 +19,7 @@ namespace GoblinRoller
         {
             GoldAtStake = _d6.Roll();
 
-            Console.WriteLine("Gold is " + GoldAtStake);
+            Console.WriteLine("🪙Gold is " + GoldAtStake);
 
             foreach (BotBase bot in Players)
                 bot.PlanTurn(this);

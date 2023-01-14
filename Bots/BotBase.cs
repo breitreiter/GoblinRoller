@@ -12,8 +12,9 @@ namespace GoblinRoller.Bots
         internal int Gold = 0;
         internal string Name = string.Empty;
 
-        internal BotBase(Deck deck)
+        internal BotBase(Deck deck, string name)
         {
+            Name = name;
             MyHand = new Hand(deck);
             MyHand.DrawUp();
         }

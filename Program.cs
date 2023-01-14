@@ -1,11 +1,40 @@
 ﻿using GoblinRoller;
+using GoblinRoller.Bots;
+using System.Text;
 using System.Xml;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        int playerCount = 6;
+        Console.OutputEncoding = Encoding.UTF8;
+
+        Console.WriteLine("Welcome to Goblins and Gremlins!");
+
+        int playerCount = int.MinValue;
+
+        while(playerCount == int.MinValue)
+        {
+            Console.Write("Total number of players (3-6)?");
+            string? countInput = Console.ReadLine();
+            if (countInput != null)
+                int.TryParse(countInput, out playerCount);
+            if (playerCount > 6 || playerCount < 3)
+            {
+                Console.WriteLine("Please enter a value between 3 and 6");
+                playerCount = int.MinValue;
+            }
+        }
+
+        bool humanPlayer = false;
+        Console.Write("Include a human player (y/N)?");
+        ConsoleKeyInfo k = Console.ReadKey();
+        if (k.KeyChar == 'y')
+            humanPlayer = true;
+
+        Console.WriteLine();
+
+        string[] playerNames = { "Annie", "Bob", "Chuck", "Dom", "Egon", "Fred" };
 
         List<int> winRate = new List<int>();
         for (int i = 0; i < playerCount; i++)
@@ -13,30 +42,42 @@ internal class Program
 
         int totalTurns = 0;
 
-        for (int i = 0; i < 100; i++)
+        int rounds = int.MinValue;
+
+        while (rounds == int.MinValue)
+        {
+            Console.Write("Number of rounds to play?");
+            string? countInput = Console.ReadLine();
+            if (countInput != null)
+                int.TryParse(countInput, out rounds);
+            if (playerCount > 6 || playerCount < 3)
+            {
+                Console.WriteLine("Please enter a numeric value");
+                rounds = int.MinValue;
+            }
+        }
+
+        for (int i = 0; i < rounds; i++)
         {
             Deck deck = new Deck();
             deck.Init(playerCount);
 
             GameTurn game = new GameTurn();
 
-            game.Players.Add(new GoblinRoller.Bots.Blitz(deck));
-            game.Players[0].Name = "Annie B";
+            if (humanPlayer)
+                game.Players.Add(new GoblinRoller.Bots.Human(deck, "You"));
 
-            game.Players.Add(new GoblinRoller.Bots.Blitz(deck));
-            game.Players[1].Name = "Bob B";
-
-            game.Players.Add(new GoblinRoller.Bots.Simple(deck));
-            game.Players[2].Name = "Chuck S";
-
-            game.Players.Add(new GoblinRoller.Bots.Simple(deck));
-            game.Players[3].Name = "Dom S";
-
-            game.Players.Add(new GoblinRoller.Bots.Rando(deck));
-            game.Players[4].Name = "Egon R";
-
-            game.Players.Add(new GoblinRoller.Bots.Rando(deck));
-            game.Players[5].Name = "You";
+            while(game.Players.Count < playerCount)
+            {
+                Random random = new Random();
+                int botType = random.Next(1, 4);
+                if (botType == 1)
+                    game.Players.Add(new GoblinRoller.Bots.Blitz(deck, playerNames[game.Players.Count]));
+                else if (botType == 2)
+                    game.Players.Add(new GoblinRoller.Bots.Simple(deck, playerNames[game.Players.Count]));
+                else
+                    game.Players.Add(new GoblinRoller.Bots.Rando(deck, playerNames[game.Players.Count]));
+            }
 
             int turns = 0;
             while (game.Winner == null)
@@ -52,15 +93,14 @@ internal class Program
             totalTurns += turns;
         }
 
-        Console.WriteLine(totalTurns + " turns played");
-        Console.WriteLine("Annie B:" + winRate[0]);
-        Console.WriteLine("Bob   B:" + winRate[1]);
-        Console.WriteLine("Chuck S:" + winRate[2]);
-        Console.WriteLine("Dom   S:" + winRate[3]);
-        Console.WriteLine("Egon  R:" + winRate[4]);
-        Console.WriteLine("Fred  R:" + winRate[5]);
+        Console.WriteLine(totalTurns + " turns played, avg " + (totalTurns / rounds) + " turns per game ");
 
-        Console.ReadLine();
+        for (int i = 0; i < winRate.Count; i++)
+            if (humanPlayer && i == 0)
+                Console.WriteLine("You:" + winRate[i]);
+            else
+                Console.WriteLine(playerNames[i] + ":" + winRate[i]);
+
     }
 }
 

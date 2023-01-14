@@ -13,7 +13,7 @@ namespace GoblinRoller.Bots
     {
         private Random _r = new();
 
-        internal Rando(Deck _deck) : base(_deck)
+        internal Rando(Deck _deck, string name) : base(_deck, name)
         {
         }
 

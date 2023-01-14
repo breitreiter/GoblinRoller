@@ -34,9 +34,9 @@ namespace GoblinRoller
         public override string ToString()
         {
             if (IsGoblin)
-                return "GO" + Power;
+                return "⛏️" + Power;
             else
-                return "GR" + Power;
+                return "🗡" + Power;
         }
     }
 
